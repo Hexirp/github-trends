@@ -1,14 +1,16 @@
 name:                github-trends
 version:             0.1.0.0
--- synopsis:
--- description:
+synopsis:            Scrape GitHub's Trends
+description:         GitHub does not provide an API to access trends.
+                     github-trends provide it. You must understand that this
+                     method is inherently unstable.
 homepage:            https://github.com/Hexirp/github-trends#readme
 license:             BSD3
 license-file:        LICENSE
 author:              Hexirp
-maintainer:          Hexirp@users.noreply.github.com
+maintainer:          https://github.com/Hexirp/github-trends/issues
 copyright:           2017 Hexirp
-category:            Other
+category:            Web
 build-type:          Simple
 extra-source-files:  README.md
 cabal-version:       >=1.10
