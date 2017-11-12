@@ -7,4 +7,6 @@ module Main where
  import qualified Data.ByteString.Lazy.Char8 as L8
 
  main :: IO ()
- main = httpLBS "https://github.com/trending/haskell" >>= L8.putStrLn
+ main = do
+  res <- httpLBS "https://github.com/trending/haskell"
+  L8.putStrLn $ getResponseBody res
