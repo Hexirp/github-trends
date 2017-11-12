@@ -29,6 +29,7 @@ executable github-trends-exe
   build-depends:       base
                      , bytestring
                      , http-conduit
+                     , xml-conduit
                      , html-conduit
                      , github-trends
   default-language:    Haskell2010
