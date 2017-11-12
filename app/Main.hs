@@ -4,18 +4,23 @@ module Main where
  import Prelude
 
  import Data.ByteString.Lazy.Char8 (ByteString)
- import Network.HTTP.Simple (httpLBS, getResponseBody, Response)
- import Text.HTML.DOM
+ import Data.Text (Text)
+ import Network.HTTP.Simple (httpLBS, getResponseBody)
+ import Text.XML (Document)
  import Text.XML.Cursor
+ import Text.HTML.DOM
 
  main :: IO ()
  main = do
   res <- request
-  print $ (fromDocument $ parseLBS $ getResponseBody res)
-   $// element "h3"
-   >=> child
-   >=> element "a"
-   >=> attribute "href"
+  print $ scrape $ parseLBS $ res
 
- request :: IO (Response ByteString)
- request = httpLBS "https://github.com/trending/haskell"
+ request :: IO ByteString
+ request = getResponseBody <$> httpLBS "https://github.com/trending/haskell"
+
+ scrape :: Document -> [Text]
+ scrape doc = fromDocument doc
+  $// element "h3"
+  >=> child
+  >=> element "a"
+  >=> attribute "href"

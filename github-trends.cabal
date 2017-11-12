@@ -28,6 +28,7 @@ executable github-trends-exe
   ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , bytestring
+                     , text
                      , http-conduit
                      , xml-conduit
                      , html-conduit
