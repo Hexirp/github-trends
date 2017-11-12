@@ -3,9 +3,8 @@
 module Main where
  import Prelude
 
- import qualified Data.ByteString.Lazy.Char8 as L8
- import Network.HTTP.Simple
- import Text.HTML.DOM
+ import Network.HTTP.Simple (httpLBS, getResponseBody)
+ import Text.HTML.DOM (parseLBS)
 
  main :: IO ()
  main = do
