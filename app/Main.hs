@@ -4,7 +4,7 @@ module Main where
  import Prelude hiding (unlines, concat)
 
  import Data.ByteString.Lazy.Char8 (ByteString)
- import Data.Text (Text, unlines, concat, unpack)
+ import Data.Text (Text, unlines, append, pack, unpack)
  import Network.HTTP.Simple (httpLBS, getResponseBody)
  import Text.XML (Document)
  import Text.XML.Cursor
@@ -24,5 +24,7 @@ module Main where
   >=> attribute "href"
 
  format :: [Text] -> Text
- format = unlines . map f where
-  f x = concat ["1. [", x, "](https://github.com", x, ")"]
+ format x = unlines
+  $ zipWith append
+   (pack <$> (++ ". ") <$> show <$> [1..])
+   (append "https://github.com" <$> x)
