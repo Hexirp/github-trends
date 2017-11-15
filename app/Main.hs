@@ -26,5 +26,5 @@ module Main where
  format :: [Text] -> Text
  format x = unlines
   $ zipWith append
-   (pack <$> (++ ". ") <$> show <$> [1..])
+   (pack <$> (++ ". ") <$> show <$> [1 :: Int .. ])
    (append "https://github.com" <$> x)
