@@ -1,15 +1,3 @@
-#!/usr/bin/env stack
-{- stack
- --resolver lts-9.13
- --install-ghc
- runghc
- --package bytestring
- --package text
- --package http-conduit
- --package xml-conduit
- --package html-conduit
--}
-
 {-# LANGUAGE OverloadedStrings #-}
 
 module Main where
