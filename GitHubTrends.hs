@@ -12,7 +12,7 @@ module Main where
  import Text.HTML.DOM (parseLBS)
 
  main :: IO ()
- main = request >>= putStr . unpack . make . format . scrape . parseLBS
+ main = request >>= putStr . unpack . format . scrape . parseLBS
 
  request :: IO ByteString
  request = getResponseBody <$> httpLBS "https://github.com/trending/haskell"
@@ -29,8 +29,5 @@ module Main where
   $ zipWith append
    (pack <$> (++ ". ") <$> show <$> [1 :: Int .. ])
    (sandwich "<" ">" <$> append "https://github.com" <$> x)
-
- make :: Text -> Text
- make = sandwich "[{\"text\": \"" "\", \"}]"
 
  sandwich a b c = a `append` c `append` b
