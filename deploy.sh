@@ -1,9 +1,9 @@
 #!/bin/bash
 
-IN=`cat -`
-curl -XPOST \
+stack exec github-trends | while IFS= read -r ln; do
+ curl -XPOST \
   -d "token=$1" \
   -d "channel=@hexirp" \
-  -d "text=Today's GitHub trends!" \
-  -d "attachments=${IN}" \
+  -d "text=${ln}" \
   "https://slack.com/api/chat.postMessage"
+done

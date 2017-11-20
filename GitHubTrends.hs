@@ -1,10 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Main where
- import Prelude hiding (concat)
+ import Prelude hiding (unlines, concat)
 
  import Data.ByteString.Lazy.Char8 (ByteString)
- import Data.Text (Text, intercalate, append, pack, unpack)
+ import Data.Text (Text, unlines, append, pack, unpack)
 
  import Network.HTTP.Simple (httpLBS, getResponseBody)
  import Text.XML (Document)
@@ -25,7 +25,7 @@ module Main where
   >=> attribute "href"
 
  format :: [Text] -> Text
- format x = intercalate "\\n"
+ format x = unlines
   $ zipWith append
    (pack <$> (++ ". ") <$> show <$> [1 :: Int .. ])
    (sandwich "<" ">" <$> append "https://github.com" <$> x)
