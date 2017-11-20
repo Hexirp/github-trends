@@ -25,7 +25,7 @@ module Main where
   >=> attribute "href"
 
  format :: [Text] -> Text
- format x = unlines
+ format x = unlines . reverse
   $ zipWith append
    (pack <$> (++ ". ") <$> show <$> [1 :: Int .. ])
    (sandwich "<" ">" <$> append "https://github.com" <$> x)
