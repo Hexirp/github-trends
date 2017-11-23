@@ -24,7 +24,4 @@ TOKENは[古いタイプのトークン](https://api.slack.com/custom-integratio
 
 ### TravisCI
 
-このリポジトリの.travis.ymlは実行するたびにslackに投稿するように設定されています。そのために必要なことは二つです。
-
-1. .travis.ymlの環境変数の部分で`TOKEN=<token>`とする
-2. deployingというブランチの中で実行する
+このリポジトリの.travis.ymlは、`TOKEN=<token>`としてdeployingというブランチで実行すれば、自動でslackに投稿するように設定されています。
