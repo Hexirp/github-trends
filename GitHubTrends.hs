@@ -31,6 +31,6 @@ module Main where
    (sandwich "<" ">" <$> append "https://github.com" <$> x)
 
  make :: Text -> Text
- make = sandwich "[{\"text\": \"" "\", \"}]"
+ make = sandwich "[{\"text\": \"" "\"}]"
 
  sandwich a b c = a `append` c `append` b
