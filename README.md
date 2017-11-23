@@ -6,7 +6,7 @@
 
 ## 使用方法
 
-stackを使用しているのでインストールしてください。
+stackを使用しています。
 
 ### ビルド
 
@@ -20,4 +20,11 @@ stack build
 ./run.sh $TOKEN
 ```
 
-TOKENは[slackの古いタイプのトークン](https://api.slack.com/custom-integrations/legacy-tokens)です。
+TOKENは[古いタイプのトークン](https://api.slack.com/custom-integrations/legacy-tokens)です。
+
+### TravisCI
+
+このリポジトリの.travis.ymlは実行するたびにslackに投稿するように設定されています。そのために必要なことは二つです。
+
+1. .travis.ymlの環境変数の部分で`TOKEN=<token>`とする
+2. deployingというブランチの中で実行する
