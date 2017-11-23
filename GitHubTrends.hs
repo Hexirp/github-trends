@@ -33,4 +33,5 @@ module Main where
  make :: Text -> Text
  make = sandwich "[{\"text\": \"" "\"}]"
 
+ sandwich :: Text -> Text -> Text -> Text
  sandwich a b c = a `append` c `append` b
