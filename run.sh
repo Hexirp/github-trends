@@ -8,4 +8,5 @@ curl -XPOST \
   -d "username=GitHub Trends" \
   -d "text=Today's GitHub trends!" \
   -d "attachments=${TRENDS}" \
-  "https://slack.com/api/chat.postMessage"
+  "https://slack.com/api/chat.postMessage" \
+    &> /dev/null
