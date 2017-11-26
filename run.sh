@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
 
+exit 1
 TRENDS=`stack exec github-trends`
 curl -XPOST \
   -d "token=$1" \
