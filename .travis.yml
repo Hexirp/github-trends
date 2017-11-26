@@ -25,9 +25,12 @@ install:
 script:
   - stack --no-terminal build
 
+before_deploy:
+  - chmod -x run.sh
+
 deploy:
   provider: script
-  script: ./run.sh $TOKEN
+  script: run.sh $TOKEN
   on:
     branch: deploying
   skip_cleanup: true
