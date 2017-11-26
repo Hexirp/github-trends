@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-TRENDS=`stack exec github-trends`
+TRENDS=$(stack exec github-trends)
 curl -XPOST \
   -d "token=$1" \
   -d "channel=@hexirp" \
