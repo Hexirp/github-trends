@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env sh
 
 TRENDS=$(stack exec github-trends)
 curl -XPOST \
