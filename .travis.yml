@@ -24,6 +24,8 @@ script:
 deploy:
   provider: script
   script: run.sh $TOKEN
+  on:
+    branch: deploying
 
 cache:
   directories:
