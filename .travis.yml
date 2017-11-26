@@ -30,7 +30,7 @@ before_deploy:
 
 deploy:
   provider: script
-  script: run.sh $TOKEN
+  script: sh run.sh $TOKEN
   on:
     branch: deploying
   skip_cleanup: true
