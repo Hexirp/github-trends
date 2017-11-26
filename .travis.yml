@@ -27,7 +27,7 @@ script:
 
 deploy:
   provider: script
-  script: run.sh $TOKEN
+  script: ./run.sh $TOKEN
   on:
     branch: deploying
   skip_cleanup: true
