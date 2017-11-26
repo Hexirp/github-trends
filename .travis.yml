@@ -30,6 +30,7 @@ deploy:
   script: run.sh $TOKEN
   on:
     branch: deploying
+  skip_cleanup: true
 
 cache:
   directories:
