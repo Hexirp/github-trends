@@ -27,7 +27,7 @@ script:
 
 deploy:
   provider: script
-  script: [ TRAVIS_EVENT_TYPE = "cron" ] && bash run $TOKEN || true
+  script: [ TRAVIS_EVENT_TYPE = "cron" ] && bash run $TOKEN || :
   on:
     branch: deploying
   skip_cleanup: true
