@@ -10,6 +10,10 @@ addons:
     packages:
       - libgmp-dev
 
+env:
+  global:
+    - secure: "vACu+1Rg3+xEHBh/v1v/+y7qIPqUwqn26nxRqciurBQGVgkZ6PXDtswndsPAcxunB/UHNkoYzlwcdBIbYqJQDik+rOj8LM/AXDpmvWUl6E3yJ1ZhCXf6XQnHuz8RoC60verBg2Tpm2a8D6c/v4K7312NnmMRnGagwNEI69SdC0fQqWQ80FbIiqZ+crEi67+wwbkZj+lpB35HDLxJ6sHF6vnegfKZ89s6iCV+AlAyzU8Y5AQSmCnT7wUyKesQvunWtTvYkeQMWD/ERIfrhTSV/3RjFlMzCnFY4aZsInicHvgANgdJWKhHTojTRbJLjp/ogyU3gaxBect6iCgHLbbZQ8YC2hAWfQa0RQQoIBIgLbLI7d6RflfbhL564dYFnZ30qrGqfWfiWze7/dZZZat1ydPmbdPlsqPg2XOI4w7uW3XHPBigqCJ4tPWu7sryNFb+W19FPFhB6sKOlwHUlXbd3COwczoDo2JvgkkPlBD40UC9VRmWkJQccVOB59PtjDenSofviyXCSs6QRWHnPYWVjxXLCh9gTcohQInXdk6yzFwTEUxX4ULwMMUXkXStyRkV1ogDty16le/z33HTZoNcAZa0+tnVZgTgGsrAKY7Nqmd0vLZMyDI9FvOBLAHOeNn4jsk0ZKSmrMfB/NbP32GWjPb+4PWDYyKaEf6Dq9kkXzw="
+
 before_install:
   - mkdir -p ~/.local/bin
   - export PATH=$HOME/.local/bin:$PATH
@@ -23,9 +27,10 @@ script:
 
 deploy:
   provider: script
-  script: run.sh $TOKEN
+  script: "[ TRAVIS_EVENT_TYPE = \"cron\" ] && bash run $TOKEN || :"
   on:
     branch: deploying
+  skip_cleanup: true
 
 cache:
   directories:
