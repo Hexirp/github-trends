@@ -18,7 +18,7 @@ module Main where
  request = getResponseBody <$> httpLBS "https://github.com/trending/haskell"
 
  scrape :: Document -> [Text]
- scrape = fromDocument . return
+ scrape = return . fromDocument
   >=> descendant
   >=> element "h3"
   >=> child
