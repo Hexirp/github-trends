@@ -8,7 +8,7 @@ module Main where
 
  import Network.HTTP.Simple (httpLBS, getResponseBody)
  import Text.XML (Document)
- import Text.XML.Cursor
+ import Text.XML.Cursor (fromDocument, element, child, attribute, ($//), (>=>))
  import Text.HTML.DOM (parseLBS)
 
  main :: IO ()
