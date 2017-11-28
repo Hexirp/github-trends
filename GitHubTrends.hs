@@ -8,7 +8,7 @@ module Main where
 
  import Network.HTTP.Simple (httpLBS, getResponseBody)
  import Text.XML (Document)
- import Text.XML.Cursor (fromDocument, element, child, attribute, ($//), (>=>))
+ import Text.XML.Cursor (fromDocument, child, descendant, element, attribute, (>=>))
  import Text.HTML.DOM (parseLBS)
 
  main :: IO ()
@@ -18,8 +18,9 @@ module Main where
  request = getResponseBody <$> httpLBS "https://github.com/trending/haskell"
 
  scrape :: Document -> [Text]
- scrape doc = fromDocument doc
-  $// element "h3"
+ scrape = fromDocument . return
+  >=> descendant
+  >=> element "h3"
   >=> child
   >=> element "a"
   >=> attribute "href"
