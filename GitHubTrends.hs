@@ -12,10 +12,13 @@ module Main where
  import Text.HTML.DOM (parseLBS)
 
  main :: IO ()
- main = request >>= putStr . unpack . make . format . scrape . parseLBS
+ main = request >>= putStr . unpack . make . format . scrape . parse
 
  request :: IO ByteString
  request = getResponseBody <$> httpLBS "https://github.com/trending/haskell"
+
+ parse :: ByteString -> Document
+ parse = parseLBS
 
  scrape :: Document -> [Text]
  scrape = return . fromDocument
