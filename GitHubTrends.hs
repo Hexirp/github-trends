@@ -20,6 +20,11 @@ module Main where
  parse :: ByteString -> Document
  parse = parseLBS
 
+ -- | Scrape 'Document'.
+ --
+ -- Represented by XPath:
+ --
+ -- > //h3/a/@href
  scrape :: Document -> [Text]
  scrape = return . fromDocument
   >=> descendant
@@ -37,5 +42,9 @@ module Main where
  make :: Text -> Text
  make = sandwich "[{\"text\": \"" "\"}]"
 
+ -- | Sandwich one string between two strings.
+ --
+ -- >>> unpack $ sandwich "aaa" "bbb" "ccc"
+ -- "aaacccbbb"
  sandwich :: Text -> Text -> Text -> Text
  sandwich a b c = a `append` c `append` b
