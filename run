@@ -7,6 +7,6 @@ curl -XPOST \
   -d "as_user=false" \
   -d "username=GitHub Trends" \
   -d "text=Today's GitHub trends!" \
-  -d "attachments=$TRENDS" \
+  -d "attachments=[{\"text\": \"$TRENDS\"}]" \
   "https://slack.com/api/chat.postMessage" \
     &> /dev/null
