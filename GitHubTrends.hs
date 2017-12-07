@@ -2,13 +2,14 @@
 
 module Main where
  import Prelude hiding (concat)
+ import Control.Monad ((>=>))
 
  import Data.ByteString.Lazy.Char8 (ByteString)
  import Data.Text (Text, intercalate, append, pack, unpack)
 
  import Network.HTTP.Simple (httpLBS, getResponseBody)
  import Text.XML (Document)
- import Text.XML.Cursor (fromDocument, child, descendant, element, attribute, (>=>))
+ import Text.XML.Cursor (fromDocument, child, descendant, element, attribute)
  import Text.HTML.DOM (parseLBS)
 
  main :: IO ()
