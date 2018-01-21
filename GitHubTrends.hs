@@ -25,7 +25,7 @@ module Main where
    (token : _) -> fmap (const ()) . httpLBS $
     flip setRequestBodyURLEncoded "https://slack.com/api/chat.postMessage" [
      ("token", fromString token),
-     ("channel", "@hexirp"),
+     ("channel", "C85U8HH0V"),
      ("as_user", "false"),
      ("username", "GitHub Trends"),
      ("text", "Today's GitHub trends!"),
