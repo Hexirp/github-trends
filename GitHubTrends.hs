@@ -4,8 +4,10 @@ module Main where
  import Prelude hiding (concat)
  import Control.Monad ((>=>))
 
- import Data.ByteString.Lazy.Char8 (ByteString)
- import Data.Text (Text, intercalate, append, pack, unpack)
+ import Data.ByteString.Lazy.Char8 (ByteString, unpack)
+ import Data.ByteString.Builder (toLazyByteString)
+ import Data.Text (Text, intercalate, append, pack)
+ import Data.Text.Encoding (encodeUtf8Builder)
 
  import Network.HTTP.Simple (httpLBS, getResponseBody)
  import Text.XML (Document)
@@ -13,13 +15,15 @@ module Main where
  import Text.HTML.DOM (parseLBS)
 
  main :: IO ()
- main = request >>= putStr . unpack . format . scrape . parse
+ main = do
+  res <- request
+  putStr $ unpack $ analyze res
 
  request :: IO ByteString
  request = getResponseBody <$> httpLBS "https://github.com/trending/haskell"
 
- parse :: ByteString -> Document
- parse = parseLBS
+ analyze :: ByteString -> ByteString
+ analyze = toLazyByteString . encodeUtf8Builder . format . scrape . parseLBS
 
  scrape :: Document -> [Text]
  scrape = return . fromDocument
