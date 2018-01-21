@@ -2,13 +2,16 @@
 
 module Main where
  import Prelude hiding (concat)
+ import Data.String (IsString(fromString))
  import Control.Monad ((>=>))
+ import System.Environment (getArgs)
+ import System.Exit (exitFailure)
 
- import Data.ByteString.Lazy.Char8 (ByteString, unpack, fromStrict)
+ import Data.ByteString.Lazy.Char8 (ByteString, fromStrict, toStrict)
  import Data.Text (Text, intercalate, append, pack)
  import Data.Text.Encoding (encodeUtf8)
 
- import Network.HTTP.Simple (httpLBS, getResponseBody)
+ import Network.HTTP.Simple (httpLBS, getResponseBody, setRequestBodyURLEncoded)
  import Text.XML (Document)
  import Text.XML.Cursor (fromDocument, child, descendant, element, attribute)
  import Text.HTML.DOM (parseLBS)
@@ -16,7 +19,17 @@ module Main where
  main :: IO ()
  main = do
   res <- request
-  putStr $ unpack $ analyze res
+  args <- getArgs
+  case args of
+   [] -> exitFailure
+   (token : _) -> fmap (const ()) . httpLBS $
+    flip setRequestBodyURLEncoded "https://slack.com/api/chat.postMessage" [
+     ("token", fromString token),
+     ("channel", "@hexirp"),
+     ("as_user", "false"),
+     ("username", "GitHub Trends"),
+     ("text", "Today's GitHub trends!"),
+     ("attachments", toStrict $ analyze res)]
 
  request :: IO ByteString
  request = getResponseBody <$> httpLBS "https://github.com/trending/haskell"
@@ -33,7 +46,7 @@ module Main where
   >=> attribute "href"
 
  format :: [Text] -> Text
- format x = intercalate "\\n"
+ format x = sandwich "[{\"text\": \"" "\"}]" . intercalate "\\n"
   $ zipWith append
    (pack <$> (++ ". ") <$> show <$> [1 :: Int .. ])
    (sandwich "<" ">" <$> append "https://github.com" <$> x)
