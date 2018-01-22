@@ -18,18 +18,19 @@ module Main where
 
  main :: IO ()
  main = do
-  res <- request
   args <- getArgs
   case args of
    [] -> exitFailure
-   (token : _) -> fmap (const ()) . httpLBS $
-    flip setRequestBodyURLEncoded "https://slack.com/api/chat.postMessage" [
-     ("token", fromString token),
-     ("channel", "C85U8HH0V"),
-     ("as_user", "false"),
-     ("username", "GitHub Trends"),
-     ("text", "Today's GitHub trends!"),
-     ("attachments", toStrict $ analyze res)]
+   (token : _) -> do
+    res <- request
+    fmap (const ()) . httpLBS
+     $ flip setRequestBodyURLEncoded "https://slack.com/api/chat.postMessage" [
+      ("token", fromString token),
+      ("channel", "C85U8HH0V"),
+      ("as_user", "false"),
+      ("username", "GitHub Trends"),
+      ("text", "Today's GitHub trends!"),
+      ("attachments", toStrict $ analyze res)]
 
  request :: IO ByteString
  request = getResponseBody <$> httpLBS "https://github.com/trending/haskell"
