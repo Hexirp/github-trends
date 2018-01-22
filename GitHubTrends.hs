@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE LambdaCase #-}
 
 module Main where
  import Prelude hiding (concat)
@@ -17,20 +18,21 @@ module Main where
  import Text.HTML.DOM (parseLBS)
 
  main :: IO ()
- main = do
-  args <- getArgs
-  case args of
-   [] -> exitFailure
-   (token : _) -> do
-    res <- request
-    fmap (const ()) . httpLBS
-     $ flip setRequestBodyURLEncoded "https://slack.com/api/chat.postMessage" [
-      ("token", fromString token),
-      ("channel", "C85U8HH0V"),
-      ("as_user", "false"),
-      ("username", "GitHub Trends"),
-      ("text", "Today's GitHub trends!"),
-      ("attachments", toStrict $ analyze res)]
+ main = getArgs >>= \case
+  (token : []) -> run token
+  _ -> exitFailure
+ 
+ run :: String -> IO ()
+ run token = do
+  res <- request
+  fmap (const ()) . httpLBS
+   $ flip setRequestBodyURLEncoded "https://slack.com/api/chat.postMessage" [
+    ("token", fromString token),
+    ("channel", "C85U8HH0V"),
+    ("as_user", "false"),
+    ("username", "GitHub Trends"),
+    ("text", "Today's GitHub trends!"),
+    ("attachments", toStrict $ analyze res)]
 
  request :: IO ByteString
  request = getResponseBody <$> httpLBS "https://github.com/trending/haskell"
