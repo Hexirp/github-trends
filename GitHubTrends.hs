@@ -2,13 +2,13 @@
 {-# LANGUAGE LambdaCase #-}
 
 module Main where
- import Prelude hiding (concat)
+ import Prelude
  import Data.String (IsString(fromString))
  import Control.Monad ((>=>))
  import System.Environment (getArgs)
  import System.Exit (exitFailure)
 
- import Data.ByteString.Lazy.Char8 (ByteString, fromStrict, toStrict)
+ import Data.ByteString.Lazy.Char8 (ByteString)
  import Data.Text (Text, intercalate, append, pack)
  import Data.Text.Encoding (encodeUtf8)
 
@@ -32,13 +32,13 @@ module Main where
     ("as_user", "false"),
     ("username", "GitHub Trends"),
     ("text", "Today's GitHub trends!"),
-    ("attachments", toStrict $ analyze res)]
+    ("attachments", encodeUtf8 $ analyze res)]
 
  request :: IO ByteString
  request = getResponseBody <$> httpLBS "https://github.com/trending/haskell"
 
- analyze :: ByteString -> ByteString
- analyze = fromStrict . encodeUtf8 . format . scrape . parseLBS
+ analyze :: ByteString -> Text
+ analyze = format . scrape . parseLBS
 
  scrape :: Document -> [Text]
  scrape = return . fromDocument
