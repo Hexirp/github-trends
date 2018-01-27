@@ -26,7 +26,9 @@ module Main where
  run token = request >>= post token
 
  request :: IO ByteString
- request = getResponseBody <$> httpLBS "https://github.com/trending/haskell"
+ request = fmap getResponseBody . httpLBS
+  $ flip setRequestBodyURLEncoded "https://github.com/trending/haskell" [
+   ("since", "weekly")]
 
  post :: String -> ByteString -> IO ()
  post token res = fmap (const ()) . httpLBS
