@@ -29,13 +29,14 @@ module Main where
  make :: IO Text
  make = do
   scraped <- scrape . parseLBS <$> request
-  state <- return "" -- readFile "hoge"
-  (formatted, state') <- return $ format scraped state
-  return $ const () state' -- writeFile "hoge" state'
-  return formatted
+  scraped_week <- scrape . parseLBS <$> request2
+  return $ format scraped scraped_week
 
  request :: IO ByteString
- request = fmap getResponseBody . httpLBS
+ request = getResponseBody <$> httpLBS "https://github.com/trending/haskell"
+
+ request2 :: IO ByteString
+ request2 = fmap getResponseBody . httpLBS
   $ flip setRequestBodyURLEncoded "https://github.com/trending/haskell" [
    ("since", "weekly")]
 
@@ -57,8 +58,8 @@ module Main where
   >=> element "a"
   >=> attribute "href"
 
- format :: [Text] -> String -> (Text, String)
- format x s = (, s) . sandwich "[{\"text\": \"" "\"}]" . intercalate "\\n"
+ format :: [Text] -> [Text] -> Text
+ format x _ = sandwich "[{\"text\": \"" "\"}]" . intercalate "\\n"
   $ zipWith append
    (pack <$> (++ ". ") <$> show <$> [1 :: Int .. ])
    (sandwich "<" ">" <$> append "https://github.com" <$> x)
