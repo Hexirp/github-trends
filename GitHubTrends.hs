@@ -4,6 +4,7 @@
 
 module Main where
  import Prelude
+ import Data.List ((\\))
  import Data.String (IsString(fromString))
  import Control.Monad ((>=>))
  import System.Environment (getArgs)
@@ -59,7 +60,11 @@ module Main where
   >=> attribute "href"
 
  format :: [Text] -> [Text] -> Text
- format x _ = sandwich "[{\"text\": \"" "\"}]" . intercalate "\\n"
+ format daily weekly
+  = listing (daily \\ weekly) `append` "\\n\\n" `append` listing daily
+
+ listing :: [Text] -> Text
+ listing x = sandwich "[{\"text\": \"" "\"}]" . intercalate "\\n"
   $ zipWith append
    (pack <$> (++ ". ") <$> show <$> [1 :: Int .. ])
    (sandwich "<" ">" <$> append "https://github.com" <$> x)
