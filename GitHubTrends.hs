@@ -7,7 +7,6 @@ module Main where
  import Data.List ((\\))
  import Data.String (IsString(fromString))
  import Control.Monad ((>=>))
- import Control.Concurrent (threadDelay)
  import System.Environment (getArgs)
  import System.Exit (exitFailure)
 
@@ -20,8 +19,6 @@ module Main where
  import Text.XML.Cursor (fromDocument, child, descendant, element, attribute)
  import Text.HTML.DOM (parseLBS)
 
- import Debug.Trace (traceShow)
-
  main :: IO ()
  main = getArgs >>= \case
   (token : []) -> run token
@@ -33,19 +30,16 @@ module Main where
  make :: IO Text
  make = do
   scraped <- scrape . parseLBS <$> request
-  threadDelay (10 * 1000 * 1000)
   scraped_week <- scrape . parseLBS <$> request2
   return $ format scraped scraped_week
 
  request :: IO ByteString
- request = fmap getResponseBody . httpLBS
-  $ flip setRequestBodyURLEncoded "https://github.com/trending/haskell" [
-   ("since", "daily")]
+ request = fmap getResponseBody
+  $ httpLBS "https://github.com/trending/haskell?since=daily"
 
  request2 :: IO ByteString
- request2 = fmap getResponseBody . httpLBS
-  $ flip setRequestBodyURLEncoded "https://github.com/trending/haskell" [
-   ("since", "weekly")]
+ request2 = fmap getResponseBody
+  $ httpLBS "https://github.com/trending/haskell?since=weekly"
 
  post :: String -> Text -> IO ()
  post token text = fmap (const ()) . httpLBS
@@ -66,7 +60,7 @@ module Main where
   >=> attribute "href"
 
  format :: [Text] -> [Text] -> Text
- format daily weekly = traceShow (daily, weekly) $ sandwich "[{\"text\": \"" "\"}]"
+ format daily weekly = sandwich "[{\"text\": \"" "\"}]"
   $ listing (daily \\ weekly) `append` "\\n\\n" `append` listing daily
 
  listing :: [Text] -> Text
