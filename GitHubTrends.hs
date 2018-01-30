@@ -23,7 +23,10 @@ module Main where
   _ -> exitFailure
  
  run :: String -> IO ()
- run token = fmap analyze request >>= post token
+ run token = make >>= post token
+
+ make :: IO Text
+ make = analyze <$> request
 
  request :: IO ByteString
  request = getResponseBody <$> httpLBS "https://github.com/trending/haskell"
