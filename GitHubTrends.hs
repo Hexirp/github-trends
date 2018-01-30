@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE TupleSections #-}
 
 module Main where
  import Prelude
@@ -29,7 +30,9 @@ module Main where
  make = do
   scraped <- scrape . parseLBS <$> request
   state <- return "" -- readFile "hoge"
-  return $ format scraped state
+  (formatted, state') <- return $ format scraped state
+  return $ const () state' -- writeFile "hoge" state'
+  return formatted
 
  request :: IO ByteString
  request = getResponseBody <$> httpLBS "https://github.com/trending/haskell"
@@ -52,8 +55,8 @@ module Main where
   >=> element "a"
   >=> attribute "href"
 
- format :: [Text] -> String -> Text
- format x _ = sandwich "[{\"text\": \"" "\"}]" . intercalate "\\n"
+ format :: [Text] -> String -> (Text, String)
+ format x s = (, s) . sandwich "[{\"text\": \"" "\"}]" . intercalate "\\n"
   $ zipWith append
    (pack <$> (++ ". ") <$> show <$> [1 :: Int .. ])
    (sandwich "<" ">" <$> append "https://github.com" <$> x)
