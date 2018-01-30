@@ -23,20 +23,20 @@ module Main where
   _ -> exitFailure
  
  run :: String -> IO ()
- run token = request >>= post token
+ run token = fmap analyze request >>= post token
 
  request :: IO ByteString
  request = getResponseBody <$> httpLBS "https://github.com/trending/haskell"
 
- post :: String -> ByteString -> IO ()
- post token res = fmap (const ()) . httpLBS
+ post :: String -> Text -> IO ()
+ post token text = fmap (const ()) . httpLBS
   $ flip setRequestBodyURLEncoded "https://slack.com/api/chat.postMessage" [
    ("token", fromString token),
    ("channel", "C85U8HH0V"),
    ("as_user", "false"),
    ("username", "GitHub Trends"),
    ("text", "Today's GitHub trends!"),
-   ("attachments", encodeUtf8 $ analyze res)]
+   ("attachments", encodeUtf8 text)]
 
  analyze :: ByteString -> Text
  analyze = format . scrape . parseLBS
