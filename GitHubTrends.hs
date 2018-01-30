@@ -26,7 +26,10 @@ module Main where
  run token = make >>= post token
 
  make :: IO Text
- make = analyze <$> request
+ make = do
+  scraped <- scrape . parseLBS <$> request
+  state <- return "" -- readFile "hoge"
+  return $ format scraped state
 
  request :: IO ByteString
  request = getResponseBody <$> httpLBS "https://github.com/trending/haskell"
@@ -41,9 +44,6 @@ module Main where
    ("text", "Today's GitHub trends!"),
    ("attachments", encodeUtf8 text)]
 
- analyze :: ByteString -> Text
- analyze = format . scrape . parseLBS
-
  scrape :: Document -> [Text]
  scrape = return . fromDocument
   >=> descendant
@@ -52,8 +52,8 @@ module Main where
   >=> element "a"
   >=> attribute "href"
 
- format :: [Text] -> Text
- format x = sandwich "[{\"text\": \"" "\"}]" . intercalate "\\n"
+ format :: [Text] -> String -> Text
+ format x _ = sandwich "[{\"text\": \"" "\"}]" . intercalate "\\n"
   $ zipWith append
    (pack <$> (++ ". ") <$> show <$> [1 :: Int .. ])
    (sandwich "<" ">" <$> append "https://github.com" <$> x)
