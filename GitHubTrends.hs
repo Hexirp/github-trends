@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE TupleSections #-}
 
 module Main where
  import Prelude
@@ -23,25 +24,30 @@ module Main where
   _ -> exitFailure
  
  run :: String -> IO ()
- run token = request >>= post token
+ run token = make >>= post token
+
+ make :: IO Text
+ make = do
+  scraped <- scrape . parseLBS <$> request
+  state <- return "" -- readFile "hoge"
+  (formatted, state') <- return $ format scraped state
+  return $ const () state' -- writeFile "hoge" state'
+  return formatted
 
  request :: IO ByteString
  request = fmap getResponseBody . httpLBS
   $ flip setRequestBodyURLEncoded "https://github.com/trending/haskell" [
    ("since", "weekly")]
 
- post :: String -> ByteString -> IO ()
- post token res = fmap (const ()) . httpLBS
+ post :: String -> Text -> IO ()
+ post token text = fmap (const ()) . httpLBS
   $ flip setRequestBodyURLEncoded "https://slack.com/api/chat.postMessage" [
    ("token", fromString token),
    ("channel", "C85U8HH0V"),
    ("as_user", "false"),
    ("username", "GitHub Trends"),
    ("text", "Today's GitHub trends!"),
-   ("attachments", encodeUtf8 $ analyze res)]
-
- analyze :: ByteString -> Text
- analyze = format . scrape . parseLBS
+   ("attachments", encodeUtf8 text)]
 
  scrape :: Document -> [Text]
  scrape = return . fromDocument
@@ -51,8 +57,8 @@ module Main where
   >=> element "a"
   >=> attribute "href"
 
- format :: [Text] -> Text
- format x = sandwich "[{\"text\": \"" "\"}]" . intercalate "\\n"
+ format :: [Text] -> String -> (Text, String)
+ format x s = (, s) . sandwich "[{\"text\": \"" "\"}]" . intercalate "\\n"
   $ zipWith append
    (pack <$> (++ ". ") <$> show <$> [1 :: Int .. ])
    (sandwich "<" ">" <$> append "https://github.com" <$> x)
