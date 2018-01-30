@@ -60,12 +60,11 @@ module Main where
   >=> attribute "href"
 
  format :: [Text] -> [Text] -> Text
- format daily weekly
-  = listing (daily \\ weekly) `append` "\\n\\n" `append` listing daily
+ format daily weekly = sandwich "[{\"text\": \"" "\"}]"
+  $ listing (daily \\ weekly) `append` "\\n\\n" `append` listing daily
 
  listing :: [Text] -> Text
- listing x = sandwich "[{\"text\": \"" "\"}]" . intercalate "\\n"
-  $ zipWith append
+ listing x = intercalate "\\n" $ zipWith append
    (pack <$> (++ ". ") <$> show <$> [1 :: Int .. ])
    (sandwich "<" ">" <$> append "https://github.com" <$> x)
 
