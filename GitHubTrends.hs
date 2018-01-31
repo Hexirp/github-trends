@@ -28,16 +28,16 @@ module Main where
 
  make :: IO Text
  make = do
-  scraped <- scrape . parseLBS <$> request
-  scraped_week <- scrape . parseLBS <$> request2
-  return $ format scraped scraped_week
+  scraped_daily <- scrape . parseLBS <$> request_daily
+  scraped_week <- scrape . parseLBS <$> request_weekly
+  return $ format scraped_daily scraped_week
 
- request :: IO ByteString
- request = fmap getResponseBody
+ request_daily :: IO ByteString
+ request_daily = fmap getResponseBody
   $ httpLBS "https://github.com/trending/haskell?since=daily"
 
- request2 :: IO ByteString
- request2 = fmap getResponseBody
+ request_weekly :: IO ByteString
+ request_weekly = fmap getResponseBody
   $ httpLBS "https://github.com/trending/haskell?since=weekly"
 
  post :: String -> Text -> IO ()
@@ -64,8 +64,8 @@ module Main where
 
  listing :: [Text] -> Text
  listing x = intercalate "\\n" $ zipWith append
-   (pack <$> (++ ". ") <$> show <$> [1 :: Int .. ])
-   (sandwich "<" ">" <$> append "https://github.com" <$> x)
+  (pack <$> (++ ". ") <$> show <$> [1 :: Int .. ])
+  (sandwich "<" ">" <$> append "https://github.com" <$> x)
 
  sandwich :: Text -> Text -> Text -> Text
  sandwich a b c = a `append` c `append` b
