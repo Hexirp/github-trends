@@ -1,5 +1,5 @@
 name:                github-trends
-version:             0.1.0.0
+version:             0.2.0.0
 synopsis:            Scrape GitHub's Trends
 description:         GitHub does not provide an API to access trends.
                      github-trends provide it. You must understand that this
