@@ -17,7 +17,7 @@ cabal-version:       >=1.10
 
 executable github-trends
   hs-source-dirs:      .
-  main-is:             GitHubTrends.hs
+  main-is:             Main.hs
   ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , bytestring
