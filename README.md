@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/Hexirp/github-trends.svg?branch=master)](https://travis-ci.org/Hexirp/github-trends)
 
-GitHubが提供しているHaskellリポジトリの[トレンド](https://github.com/trending/haskell)をスクレイピングしてslackに投稿するプログラムです。[日本Haskellユーザーグループ](https://haskell.jp)の[公式Slack](https://haskell-jp.slack.com/)でトレンドを見たくて作りました。もちろん、Haskell製です。
+GitHubが提供しているHaskellリポジトリの[トレンド](https://github.com/trending/haskell)をスクレイピングしてslackに投稿するプログラムです。[日本Haskellユーザーグループ](https://haskell.jp)の[公式Slack](https://haskell-jp.slack.com/)でトレンドを見たくて作りました。もちろん、Haskell製です！
 
 ## 仕組み
 
