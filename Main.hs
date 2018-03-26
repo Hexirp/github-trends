@@ -6,6 +6,7 @@ module Main where
  import Data.List ((\\))
  import Data.String (IsString(fromString))
  import Control.Monad ((>=>))
+ import Control.Concurrent (threadDelay)
  import System.Environment (getArgs)
  import System.Exit (exitFailure)
 
@@ -29,8 +30,9 @@ module Main where
  make :: IO Text
  make = do
   scraped_daily <- scrape . parseLBS <$> request_daily
-  scraped_week <- scrape . parseLBS <$> request_weekly
-  return $ format scraped_daily scraped_week
+  threadDelay (60 * 1000 * 1000)
+  scraped_weekly <- scrape . parseLBS <$> request_weekly
+  return $ format scraped_daily scraped_weekly
 
  request_daily :: IO ByteString
  request_daily = fmap getResponseBody
