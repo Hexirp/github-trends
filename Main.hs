@@ -11,7 +11,7 @@ module Main where
  import System.Exit (exitFailure)
 
  import Data.ByteString.Lazy.Char8 (ByteString)
- import Data.Text (Text, intercalate, append, pack, unpack)
+ import Data.Text (Text, intercalate, append, pack)
  import Data.Text.Encoding (encodeUtf8)
 
  import Network.HTTP.Simple (httpLBS, getResponseBody, setRequestBodyURLEncoded)
@@ -25,7 +25,7 @@ module Main where
   _ -> exitFailure
  
  run :: String -> IO ()
- run token = make >>= putStrLn . unpack
+ run token = make >>= post token
 
  make :: IO Text
  make = do
@@ -61,7 +61,7 @@ module Main where
   >=> attribute "href"
 
  format :: [Text] -> [Text] -> Text
- format daily weekly = pack . read . unpack . sandwich "\"" "\""
+ format daily weekly = sandwich "[{\"text\": \"" "\"}]"
   $ listing (daily \\ weekly) `append` "\\n\\n" `append` listing daily
 
  listing :: [Text] -> Text
