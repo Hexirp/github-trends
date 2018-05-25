@@ -35,12 +35,18 @@ module Main where
   return $ format scraped_daily scraped_weekly
 
  request_daily :: IO ByteString
- request_daily = fmap getResponseBody
-  $ httpLBS "https://github.com/trending/haskell?since=daily"
+ request_daily = fmap getResponseBody . httpLBS
+  $ addRequestHeader
+   "User-Agent"
+   "github-trends/0.2.0.0 (+https://github.com/Hexirp/github-trends)"
+   "https://github.com/trending/haskell?since=weekly"
 
  request_weekly :: IO ByteString
- request_weekly = fmap getResponseBody
-  $ httpLBS "https://github.com/trending/haskell?since=weekly"
+ request_weekly = fmap getResponseBody . httpLBS
+  $ addRequestHeader
+   "User-Agent"
+   "github-trends/0.2.0.0 (+https://github.com/Hexirp/github-trends)"
+   "https://github.com/trending/haskell?since=weekly"
 
  post :: String -> Text -> IO ()
  post token text = fmap (const ()) . httpLBS
