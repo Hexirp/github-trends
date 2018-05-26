@@ -14,7 +14,11 @@ module Main where
  import Data.Text (Text, intercalate, append, pack)
  import Data.Text.Encoding (encodeUtf8)
 
- import Network.HTTP.Simple (httpLBS, getResponseBody, setRequestBodyURLEncoded)
+ import Network.HTTP.Simple (
+  httpLBS,
+  getResponseBody,
+  setRequestBodyURLEncoded,
+  addRequestHeader)
  import Text.XML (Document)
  import Text.XML.Cursor (fromDocument, child, descendant, element, attribute)
  import Text.HTML.DOM (parseLBS)
@@ -39,7 +43,7 @@ module Main where
   $ addRequestHeader
    "User-Agent"
    "github-trends/0.2.0.0 (+https://github.com/Hexirp/github-trends)"
-   "https://github.com/trending/haskell?since=weekly"
+   "https://github.com/trending/haskell?since=daily"
 
  request_weekly :: IO ByteString
  request_weekly = fmap getResponseBody . httpLBS
