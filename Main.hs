@@ -14,7 +14,11 @@ module Main where
  import Data.Text (Text, intercalate, append, pack)
  import Data.Text.Encoding (encodeUtf8)
 
- import Network.HTTP.Simple (httpLBS, getResponseBody, setRequestBodyURLEncoded)
+ import Network.HTTP.Simple (
+  httpLBS,
+  getResponseBody,
+  setRequestBodyURLEncoded,
+  addRequestHeader)
  import Text.XML (Document)
  import Text.XML.Cursor (fromDocument, child, descendant, element, attribute)
  import Text.HTML.DOM (parseLBS)
@@ -35,12 +39,18 @@ module Main where
   return $ format scraped_daily scraped_weekly
 
  request_daily :: IO ByteString
- request_daily = fmap getResponseBody
-  $ httpLBS "https://github.com/trending/haskell?since=daily"
+ request_daily = fmap getResponseBody . httpLBS
+  $ addRequestHeader
+   "User-Agent"
+   "github-trends/0.2.0.0 (+https://github.com/Hexirp/github-trends)"
+   "https://github.com/trending/haskell?since=daily"
 
  request_weekly :: IO ByteString
- request_weekly = fmap getResponseBody
-  $ httpLBS "https://github.com/trending/haskell?since=weekly"
+ request_weekly = fmap getResponseBody . httpLBS
+  $ addRequestHeader
+   "User-Agent"
+   "github-trends/0.2.0.0 (+https://github.com/Hexirp/github-trends)"
+   "https://github.com/trending/haskell?since=weekly"
 
  post :: String -> Text -> IO ()
  post token text = fmap (const ()) . httpLBS
