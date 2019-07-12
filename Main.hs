@@ -3,10 +3,8 @@
 
 module Main where
  import Prelude
- import Data.List ((\\))
  import Data.String (IsString(fromString))
  import Control.Monad ((>=>))
- import Control.Concurrent (threadDelay)
  import System.Environment (getArgs)
  import System.Exit (exitFailure)
 
@@ -33,20 +31,11 @@ module Main where
 
  make :: IO Text
  make = do
-  scraped_daily <- scrape . parseLBS <$> request_daily
-  threadDelay (60 * 1000 * 1000)
-  scraped_weekly <- scrape . parseLBS <$> request_weekly
-  return $ format scraped_daily scraped_weekly
+  scraped <- scrape . parseLBS <$> request
+  return $ format scraped
 
- request_daily :: IO ByteString
- request_daily = fmap getResponseBody . httpLBS
-  $ addRequestHeader
-   "User-Agent"
-   "github-trends/0.2.0.0 (+https://github.com/Hexirp/github-trends)"
-   "https://github.com/trending/haskell?since=daily"
-
- request_weekly :: IO ByteString
- request_weekly = fmap getResponseBody . httpLBS
+ request :: IO ByteString
+ request = fmap getResponseBody . httpLBS
   $ addRequestHeader
    "User-Agent"
    "github-trends/0.2.0.0 (+https://github.com/Hexirp/github-trends)"
@@ -59,7 +48,7 @@ module Main where
    ("channel", "C85U8HH0V"),
    ("as_user", "false"),
    ("username", "GitHub Trends"),
-   ("text", "Today's GitHub trends!"),
+   ("text", "This week's trend is this!"),
    ("attachments", encodeUtf8 text)]
 
  scrape :: Document -> [Text]
@@ -70,9 +59,8 @@ module Main where
   >=> element "a"
   >=> attribute "href"
 
- format :: [Text] -> [Text] -> Text
- format daily weekly = sandwich "[{\"text\": \"" "\"}]"
-  $ listing (daily \\ weekly) `append` "\\n\\n" `append` listing daily
+ format :: [Text] -> Text
+ format scraped = sandwich "[{\"text\": \"" "\"}]" $ listing scraped
 
  listing :: [Text] -> Text
  listing x = intercalate "\\n" $ zipWith append
