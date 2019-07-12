@@ -33,17 +33,8 @@ module Main where
 
  make :: IO Text
  make = do
-  scraped_daily <- scrape . parseLBS <$> request_daily
-  threadDelay (60 * 1000 * 1000)
   scraped_weekly <- scrape . parseLBS <$> request_weekly
-  return $ format scraped_daily scraped_weekly
-
- request_daily :: IO ByteString
- request_daily = fmap getResponseBody . httpLBS
-  $ addRequestHeader
-   "User-Agent"
-   "github-trends/0.2.0.0 (+https://github.com/Hexirp/github-trends)"
-   "https://github.com/trending/haskell?since=daily"
+  return $ format scraped_weekly
 
  request_weekly :: IO ByteString
  request_weekly = fmap getResponseBody . httpLBS
@@ -70,9 +61,8 @@ module Main where
   >=> element "a"
   >=> attribute "href"
 
- format :: [Text] -> [Text] -> Text
- format daily weekly = sandwich "[{\"text\": \"" "\"}]"
-  $ listing (daily \\ weekly) `append` "\\n\\n" `append` listing daily
+ format :: [Text] -> Text
+ format weekly = sandwich "[{\"text\": \"" "\"}]" $ listing weekly
 
  listing :: [Text] -> Text
  listing x = intercalate "\\n" $ zipWith append
