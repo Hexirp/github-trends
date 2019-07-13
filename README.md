@@ -25,9 +25,6 @@ GitHub が提供している Haskell リポジトリの[トレンド](https://gi
 
 ### 内部
 
-[http-conduit](https://hackage.haskell.org/package/http-conduit) ライブラリを使用して[日刊トレンドのページ](https://github.com/trending/haskell?since=daily)と[週刊トレンドのページ](https://github.com/trending/haskell?since=weekly)を取得します。
+[http-conduit](https://hackage.haskell.org/package/http-conduit) ライブラリを使用して[週間でのトレンドのページ](https://github.com/trending/haskell?since=weekly)を取得します。
 その後、[html-conduit](https://hackage.haskell.org/package/html-conduit) ライブラリを使用してXMLデータとして読み込み、[xml-conduit](https://hackage.haskell.org/package/xml-conduit) ライブラリを使用してリポジトリ名をリストの形で取り出します。
-ここで、日刊トレンドのリストを `daily` 、週刊トレンドのリストを `weekly` とします。
-
-「新しいトレンド」は`daily`から`weekly`に含まれるものを間引いたもので、「全てのトレンド」は`daily`です。
-新しいトレンドがこのように定義されている理由は、「ずっと日刊トレンドに入り続ける古いトレンドであるリポジトリなら、週刊トレンドにも入っているだろう。よって、週刊トレンドに入っていないリポジトリは新しいトレンドであろう」という予測によります。
+そのリポジトリのリストを、（ Slack の表記での）リストに整えて、メッセージを構築して [http-conduit](https://hackage.haskell.org/package/http-conduit) をまた使用して送信します。
