@@ -15,14 +15,6 @@ GitHub が提供している Haskell リポジトリの[トレンド](https://gi
 デプロイの時にプログラムを実行するようにして、Cron 機能を使って毎日ジョブを実行させています。
 古い Slack トークンはパスワードと同等に扱わなければならない代物なので Encrypt 機能を使って隠しています。
 
-### 形式
-
-```
-(新しいトレンドの番号付きリスト)
-
-(全てのトレンドの番号付きリスト)
-```
-
 ### 内部
 
 [http-conduit](https://hackage.haskell.org/package/http-conduit) ライブラリを使用して[週間でのトレンドのページ](https://github.com/trending/haskell?since=weekly)を取得します。
