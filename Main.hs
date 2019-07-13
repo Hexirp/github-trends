@@ -18,7 +18,13 @@ module Main where
   setRequestBodyURLEncoded,
   addRequestHeader)
  import Text.XML (Document)
- import Text.XML.Cursor (fromDocument, child, descendant, element, attribute)
+ import Text.XML.Cursor (
+  fromDocument,
+  child,
+  descendant,
+  element,
+  attribute,
+  attributeIs)
  import Text.HTML.DOM (parseLBS)
 
  main :: IO ()
@@ -54,7 +60,8 @@ module Main where
  scrape :: Document -> [Text]
  scrape = return . fromDocument
   >=> descendant
-  >=> element "h3"
+  >=> element "h1"
+  >=> attributeIs "class" "h3 lh-condensed"
   >=> child
   >=> element "a"
   >=> attribute "href"
